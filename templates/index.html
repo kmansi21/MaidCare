@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MaidCare - Premium Home Services</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.7;
+        scroll-behavior: smooth;
+      }
+
+      /* Navbar */
+      .navbar {
+        padding: 15px 0;
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+      .nav-link {
+        font-weight: 500;
+        margin-left: 18px;
+        font-size: 0.95rem;
+      }
+      .navbar-toggler {
+        border: none;
+      }
+      .navbar-toggler:focus {
+        box-shadow: none;
+      }
+
+      /* Hero */
+      .hero {
+        min-height: 100vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url("/static/house-maid-service.jpg") center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        color: white;
+        padding-top: 80px;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+      .btn-custom {
+        background: #111;
+        color: #fff;
+        padding: 12px 30px;
+        border-radius: 40px;
+        border: none;
+        font-size: 0.95rem;
+      }
+      .btn-custom:hover {
+        background: #333;
+      }
+
+      /* Sections */
+      section {
+        padding: 80px 0;
+      }
+
+      /* About */
+      .about-section {
+        background: #f8f9fa;
+      }
+      .about-section h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      .about-section p {
+        font-size: 1rem;
+        color: #555;
+        font-style: italic;
+      }
+      .about-highlight h6 {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .about-highlight small {
+        font-size: 0.85rem;
+      }
+
+      /* Services */
+      .service-card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+        height: 100%;
+      }
+      .service-card:hover {
+        transform: translateY(-8px);
+      }
+      .service-card h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .service-card p {
+        font-size: 0.95rem;
+        color: #555;
+      }
+
+      /* Request Section */
+      .request-section {
+        background: #111;
+        color: #fff;
+      }
+      .request-info {
+        padding: 40px;
+      }
+      .request-info h2 {
+        font-size: 2rem;
+      }
+      .request-info p {
+        font-size: 1rem;
+      }
+      .request-info ul li {
+        font-size: 0.95rem;
+      }
+
+      /* Contact */
+      .contact-card {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        height: 100%;
+      }
+      .contact-card h4 {
+        font-size: 1.2rem;
+      }
+
+      /* Footer */
+      footer {
+        background: #111;
+        color: #aaa;
+        padding: 20px 0;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 992px) {
+        .hero h1 {
+          font-size: 2.2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          text-align: center;
+          padding: 100px 20px;
+        }
+
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+
+        .hero p {
+          font-size: 0.95rem;
+        }
+
+        .nav-link {
+          margin-left: 0;
+          margin-top: 10px;
+        }
+
+        section {
+          padding: 60px 0;
+        }
+
+        .about-section h2 {
+          font-size: 1.6rem;
+        }
+
+        .about-section p {
+          font-size: 0.95rem;
+        }
+
+        .request-info {
+          text-align: center;
+          padding: 20px;
+        }
+
+        .contact-card {
+          padding: 20px;
+        }
+
+        .service-card {
+          padding: 25px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .hero h1 {
+          font-size: 1.5rem;
+        }
+
+        .hero p {
+          font-size: 0.9rem;
+        }
+
+        .btn-custom {
+          padding: 10px 22px;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          MaidCare
+          <i class="fa-solid fa-broom ms-1 fa-flip-horizontal"></i>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#services">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#request">Request</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="container">
+        <h1>Trusted Housekeepers<br />For Your Home</h1>
+        <p class="mt-3 mb-4">Safe • Verified • Professional</p>
+        <a href="#request" class="btn btn-custom">Book a Maid</a>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about-section py-5 bg-light">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-md-6">
+            <h2 class="fw-bold mb-4">Why Choose MaidCare?</h2>
+            <p class="text-muted mb-4">
+              Reliable, trained and background-verified housekeepers to make
+              your home organized and stress-free.
+            </p>
+
+            <div class="row g-3">
+              <div class="col-6">
+                <div
+                  class="about-highlight p-3 rounded-4 shadow-sm bg-white h-100"
+                >
+                  <h6 class="fw-bold">Verified Staff</h6>
+                  <small class="text-muted"
+                    >Background checked professionals</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div
+                  class="about-highlight p-3 rounded-4 shadow-sm bg-white h-100"
+                >
+                  <h6 class="fw-bold">Flexible Shifts</h6>
+                  <small class="text-muted"
+                    >Morning to evening availability</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div
+                  class="about-highlight p-3 rounded-4 shadow-sm bg-white h-100"
+                >
+                  <h6 class="fw-bold">Trusted Service</h6>
+                  <small class="text-muted"
+                    >Reliable and consistent support</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div
+                  class="about-highlight p-3 rounded-4 shadow-sm bg-white h-100"
+                >
+                  <h6 class="fw-bold">Quick Support</h6>
+                  <small class="text-muted">Responsive customer service</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-4 bg-white rounded-4 shadow-sm">
+              <h5 class="fw-bold mb-3">Our Mission</h5>
+              <p class="text-muted">
+                To simplify household management by connecting families with
+                trusted, skilled and dependable housekeepers. We aim to create a
+                safe and professional ecosystem for both employers and domestic
+                workers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Our Maid Services</h2>
+          <p class="text-muted">
+            Complete household assistance for your daily needs
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">Daily House Cleaning</h5>
+              <p>
+                Sweeping, mopping, dusting, bathroom cleaning, kitchen cleaning
+                and maintaining overall hygiene of your home on a regular basis.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">Utensil Washing</h5>
+              <p>
+                Cleaning and organizing kitchen utensils, dishes and maintaining
+                cleanliness in the cooking area daily.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">Laundry & Ironing</h5>
+              <p>
+                Washing clothes, drying, folding and ironing to keep your
+                wardrobe neat and well managed.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">Cooking Support</h5>
+              <p>
+                Preparing daily meals as per your preference, basic chopping,
+                kitchen preparation and maintaining cooking hygiene.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">Grocery Assistance</h5>
+              <p>
+                Help with grocery management, storing items properly and
+                assisting in basic household arrangements.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="service-card h-100">
+              <h5 class="fw-bold mb-3">General Household Help</h5>
+              <p>
+                Support in organizing rooms, cleaning fans, windows, cupboards
+                and assisting in any regular home maintenance tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Request -->
+
+    <section class="request-section py-5" id="request">
+      <div class="container">
+        <div class="row g-5 align-items-center">
+          <!-- LEFT SIDE INFO -->
+          <div class="col-lg-5">
+            <div class="request-info">
+              <h2 class="fw-bold mb-4">Request a Housekeeper</h2>
+              <p class="mb-4">
+                Fill out the form to hire a professional and verified
+                housekeeper based on your preferred service type and timing.
+              </p>
+
+              <ul class="list-unstyled">
+                <li class="mb-2">✔ Background Verified Staff</li>
+                <li class="mb-2">✔ Flexible Full-Time & Part-Time Options</li>
+                <li class="mb-2">✔ Reliable & Trusted Service</li>
+                <li class="mb-2">✔ Quick Response & Confirmation</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE FORM -->
+          <div class="col-lg-7">
+            <div class="bg-white text-dark p-5 rounded-4 shadow-lg">
+              <h4 class="fw-bold mb-4 text-center">Hire a Housekeeper</h4>
+
+              <form method="POST" action="/request/">
+                {% csrf_token %} {% if messages %} {% for message in messages %}
+                <div class="alert alert-success text-center">{{ message }}</div>
+                {% endfor %} {% endif %}
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input
+                      type="text"
+                      name="full_name"
+                      class="form-control"
+                      placeholder="Enter your name"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Contact Number</label>
+                    <input
+                      type="tel"
+                      name="contact_number"
+                      class="form-control"
+                      placeholder="10 digit number"
+                      pattern="[0-9]{10}"
+                      maxlength="10"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Address</label>
+                    <textarea
+                      name="address"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Enter full address"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Service Type</label>
+                    <select name="service_type" class="form-select" required>
+                      <option value="">Select Type</option>
+                      <option value="Full-Time">Full-Time</option>
+                      <option value="Part-Time">Part-Time</option>
+                    </select>
+                  </div>
+
+<div class="col-md-6">
+    <label class="form-label">Category</label>
+    <select name="category" class="form-select" required>
+        <option value="">Select Category</option>
+        {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.name }}</option>
+            
+        {% endfor %}
+    </select>
+</div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Work Shift From</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        name="from_hour"
+                        min="1"
+                        max="12"
+                        class="form-control"
+                        placeholder="Hour"
+                        required
+                      />
+                      <select name="from_period" class="form-select" required>
+                        <option value="">AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Work Shift To</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        name="to_hour"
+                        min="1"
+                        max="12"
+                        class="form-control"
+                        placeholder="Hour"
+                        required
+                      />
+                      <select name="to_period" class="form-select" required>
+                        <option value="">AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Start Date</label>
+                    <input
+                      type="date"
+                      name="start_date"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea
+                      name="additional_notes"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Any special instructions"
+                    ></textarea>
+                  </div>
+
+                  <div class="col-12 text-center mt-3">
+                    <button
+                      type="submit"
+                      class="btn btn-dark rounded-pill px-5 py-2"
+                    >
+                      Submit Request
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="contact-card">
+              <h4 class="fw-bold">Contact Information</h4>
+              <p class="mt-3"><strong>Email:</strong> support@maidcare.com</p>
+              <p><strong>Phone:</strong> +91 9876543210</p>
+              <p><strong>Location:</strong> Nanded, Maharashtra</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="contact-card">
+              <h4 class="fw-bold">Working Hours</h4>
+              <p class="mt-3">Monday - Saturday: 9:00 AM - 7:00 PM</p>
+              <p>Sunday: Closed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2026 MaidCare. All Rights Reserved.</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
