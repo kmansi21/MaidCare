@@ -1,0 +1,470 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>MaidCare - Hiring Requests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f6f9;
+      }
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        background: #111;
+        color: white;
+        padding-top: 20px;
+        transition: 0.3s;
+        z-index: 1000;
+      }
+      .sidebar .brand {
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+      }
+      .sidebar ul li {
+        padding: 12px 20px;
+      }
+      .sidebar ul li a {
+        color: #ddd;
+        text-decoration: none;
+        display: block;
+        font-size: 14px;
+      }
+      .sidebar ul li a:hover {
+        color: #fff;
+      }
+      .content {
+        margin-left: 250px;
+        padding: 30px;
+      }
+      .card-box {
+        padding: 20px;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          left: -250px;
+        }
+        .sidebar.active {
+          left: 0;
+        }
+        .content {
+          margin-left: 0;
+          padding: 20px;
+        }
+        .content h4 {
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .overlay {
+          display: none;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.4);
+          top: 0;
+          left: 0;
+          z-index: 999;
+        }
+        .overlay.active {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="d-flex justify-content-between align-items-center px-3">
+        <div class="brand mb-0">
+          MaidCare <i class="fa-solid fa-broom ms-1 fa-flip-horizontal"></i>
+        </div>
+        <button class="btn text-white d-md-none" id="close-btn">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <hr class="text-secondary" />
+      <ul class="sidebar-menu">
+        <li>
+         <a href="{% url 'admin_dashboard' %}"
+            ><i class="fa fa-tachometer-alt me-2"></i> Dashboard</a
+          >
+        </li>
+        <li class="toggle">
+          <a href="{% url 'category' %}"><i class="fa fa-list me-2"></i> Category</a>
+        </li>
+        <li class="toggle">
+          <a href="{% url 'housekeeper' %}"
+            ><i class="fa fa-user-friends me-2"></i> Housekeeper</a
+          >
+        </li>
+        <li class="toggle">
+          <a href="{% url 'hiring_requests' %}"
+            ><i class="fa fa-file-alt me-2"></i> Hiring Requests</a
+          >
+        </li>
+        <li>
+          <a href="{% url 'admin_logout' %}"><i class="fa fa-sign-out-alt me-2"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <button class="btn btn-dark d-md-none" id="menu-btn">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h4 class="mb-0">Hiring Requests Management</h4>
+      </div>
+
+      <div class="card-box">
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2"
+        >
+          <h5 class="mb-0">
+            <i class="fa fa-file-alt me-2"></i>All Hiring Requests
+          </h5>
+
+          <div class="d-flex gap-2">
+            <!-- Status Filter -->
+            <select class="form-select w-auto" id="statusFilter">
+              <option value="all">All Requests</option>
+              <option value="new">New Requests</option>
+              <option value="assigned">Assigned Requests</option>
+              <option value="cancelled">Cancelled Requests</option>
+            </select>
+
+            <!-- Category Filter -->
+            <select class="form-select w-auto" id="categoryFilter">
+              <option value="all">All Categories</option>
+              {% for cat in categories %}
+              <option value="{{ cat.name }}">{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+
+            <select class="form-select w-auto" id="housekeeperFilter">
+              <option value="all">All Maids</option>
+              {% for hk in housekeepers %}
+              <option value="{{ hk.name }}">{{ hk.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="table-responsive d-none d-md-block">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Date and Shift Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for req in requests %}
+              <tr
+                data-status="{{ req.status_normalized }}"
+                data-category="{{ req.category_name }}"
+                data-housekeeper="{% if req.housekeeper %}{{ req.housekeeper.name }}{% else %}none{% endif %}"
+              >
+                <td>{{ forloop.counter }}</td>
+                <td>{{ req.customer_name }}</td>
+                <td>{{ req.mobile }}</td>
+                <td>{{req.address}}</td>
+                <td>{{req.city}}</td>
+                <td>{{ req.category_name }}</td>
+                <td>
+                  {% if req.status_normalized == "new" %}
+                  <span class="badge bg-primary">New</span>
+                  {% elif req.status_normalized == "assigned" %}
+                  <span class="badge bg-success">Assigned</span>
+                  {% else %}
+                  <span class="badge bg-danger">Cancelled</span>
+                  {% endif %}
+
+                  <!-- ✅ ADD THIS HERE -->
+                  {% if req.status == "Pending" and req.assignment_reason %}
+                  <div class="text-warning small mt-1">
+                    <i class="fa fa-exclamation-circle me-1"></i>
+                    {{ req.assignment_reason }}
+                  </div>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if req.status_normalized == "assigned" %} {{req.housekeeper.name }}
+                  <form method="POST" style="display: inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="req_id" value="{{ req.id }}" />
+                    <button
+                      type="submit"
+                      name="action"
+                      value="cancel"
+                      class="btn btn-sm btn-danger"
+                    >
+                      Cancel
+                    </button>
+                  </form>
+                  {% elif req.status_normalized == "new" %}
+                  <!-- Assign Form -->
+                  <form method="POST" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="req_id" value="{{ req.id }}" />
+
+                    <select
+                      name="housekeeper_id"
+                      class="form-select form-select-sm w-auto"
+                    >
+                      <option value="">Select Housekeeper</option>
+                      {% for hk in housekeepers %}
+                      <option value="{{ hk.id }}">{{ hk.name }}</option>
+                      {% endfor %}
+                    </select>
+
+                    <button
+                      type="submit"
+                      name="action"
+                      value="assign"
+                      class="btn btn-sm btn-success"
+                    >
+                      Assign
+                    </button>
+                    <button
+                      type="submit"
+                      name="action"
+                      value="cancel"
+                      class="btn btn-sm btn-danger"
+                    >
+                      Cancel
+                    </button>
+                  </form>
+
+                  {% else %} - {% endif %}
+                </td>
+
+                <td>
+                  <p>
+                    <i class="fa fa-clock me-2"></i>{{ req.shift_time }}<br />
+                    {{ req.created_at }}
+                  </p>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="9" class="text-center">No Requests Found</td>
+              </tr>
+              {% endfor %}
+
+              <tr id="noDataRow" style="display: none">
+                <td colspan="9" class="text-center text-muted py-4">
+                  <i class="fa fa-folder-open fa-2x mb-2"></i><br />
+                  No Hiring Requests Found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="d-md-none" id="mobileRequestList">
+          {% for req in requests %}
+          <div
+            class="card mb-3 shadow-sm request-card"
+            data-status="{{ req.status_normalized }}"
+            data-category="{{ req.category_name }}"
+            data-housekeeper="{% if req.housekeeper %}{{ req.housekeeper.name }}{% else %}none{% endif %}"
+          >
+            <div class="card-body">
+              <!-- Header -->
+              <div class="d-flex justify-content-between">
+                <h6 class="fw-bold mb-1">{{ req.customer_name }}</h6>
+
+                {% if req.status_normalized == "new" %}
+                <span class="badge bg-primary">New</span>
+                {% elif req.status_normalized == "assigned" %}
+                <span class="badge bg-success">Assigned</span>
+                {% else %}
+                <span class="badge bg-danger">Cancelled</span>
+                {% endif %}
+              </div>
+
+              <!-- Basic Info -->
+              <p class="mb-1">
+                <i class="fa fa-phone me-2"></i>{{ req.mobile }}
+              </p>
+              <p class="mb-1">
+                <i class="fa fa-list me-2"></i>{{ req.category_name }}
+              </p>
+
+              <!-- ✅ Address -->
+              <p class="mb-1">
+                <i class="fa fa-map-marker-alt me-2"></i>{{ req.address }}
+              </p>
+
+              <!-- ✅ City -->
+              <p class="mb-1"><i class="fa fa-city me-2"></i>{{ req.city }}</p>
+
+              <!-- ✅ Reason (PERFECT placement) -->
+              {% if req.status == "Pending" and req.assignment_reason %}
+              <div class="alert alert-warning py-1 px-2 mt-2 mb-2 small">
+                <i class="fa fa-exclamation-circle me-1"></i>
+                {{ req.assignment_reason }}
+              </div>
+              {% endif %}
+
+              <!-- Assignment Section -->
+              <div class="mb-1">
+                <i class="fa fa-user me-2"></i>
+
+                {% if req.status_normalized == "assigned" %} {{req.housekeeper.name }}
+
+                <form method="POST" style="display: inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="req_id" value="{{ req.id }}" />
+                  <button
+                    type="submit"
+                    name="action"
+                    value="cancel"
+                    class="btn btn-sm btn-danger"
+                  >
+                    Cancel
+                  </button>
+                </form>
+
+                {% elif req.status_normalized == "new" %}
+                <form method="POST" class="mt-2">
+                  {% csrf_token %}
+                  <input type="hidden" name="req_id" value="{{ req.id }}" />
+
+                  <select
+                    name="housekeeper_id"
+                    class="form-select form-select-sm mb-2"
+                  >
+                    <option value="">Select Housekeeper</option>
+                    {% for hk in housekeepers %}
+                    <option value="{{ hk.id }}">{{ hk.name }}</option>
+                    {% endfor %}
+                  </select>
+
+                  <button
+                    type="submit"
+                    name="action"
+                    value="assign"
+                    class="btn btn-sm btn-success"
+                  >
+                    Assign
+                  </button>
+                  <button
+                    type="submit"
+                    name="action"
+                    value="cancel"
+                    class="btn btn-sm btn-danger"
+                  >
+                    Cancel
+                  </button>
+                </form>
+
+                {% else %} - {% endif %}
+              </div>
+
+              <!-- Time -->
+              <p class="mb-0">
+                <i class="fa fa-clock me-2"></i>{{ req.shift_time }}
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const menuBtn = document.getElementById("menu-btn");
+
+      if (menuBtn) {
+        menuBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("active");
+          overlay.classList.toggle("active");
+        });
+      }
+      if (overlay) {
+        overlay.addEventListener("click", () => {
+          sidebar.classList.remove("active");
+          overlay.classList.remove("active");
+        });
+      }
+
+      const statusFilter = document.getElementById("statusFilter");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const housekeeperFilter = document.getElementById("housekeeperFilter");
+
+      function filterData() {
+        const statusValue = statusFilter.value.toLowerCase();
+        const categoryValue = categoryFilter.value.toLowerCase();
+        const housekeeperValue = housekeeperFilter.value.toLowerCase();
+
+        let visibleCount = 0;
+
+        document.querySelectorAll("tbody tr").forEach((row) => {
+          if (row.id === "noDataRow") return;
+
+          const status = row.dataset.status?.toLowerCase();
+          const category = row.dataset.category?.toLowerCase();
+          const housekeeper = row.dataset.housekeeper?.toLowerCase();
+
+          const statusMatch = statusValue === "all" || status === statusValue;
+          const categoryMatch =
+            categoryValue === "all" || category === categoryValue;
+          const housekeeperMatch =
+            housekeeperValue === "all" || housekeeper === housekeeperValue;
+
+          if (statusMatch && categoryMatch && housekeeperMatch) {
+            row.style.display = "";
+            visibleCount++;
+          } else {
+            row.style.display = "none";
+          }
+        });
+
+        document.getElementById("noDataRow").style.display =
+          visibleCount === 0 ? "" : "none";
+      }
+      statusFilter.addEventListener("change", filterData);
+      categoryFilter.addEventListener("change", filterData);
+      housekeeperFilter.addEventListener("change", filterData);
+    </script>
+  </body>
+</html>
